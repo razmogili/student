@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Information</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        #student-list {
+            margin-top: 20px;
+        }
+        .student {
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            display: none; /* Hide students initially */
+        }
+        input[type="text"] {
+            padding: 8px;
+            margin-bottom: 20px;
+            width: 200px;
+        }
+        button {
+            padding: 10px 15px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Student Information</h1>
+
+    <label for="search">Search by Hall Ticket Number:</label>
+    <input type="text" id="search" placeholder="Enter Hall Ticket Number">
+    <button onclick="searchStudent()">Search</button>
+    
+    <div id="student-list">
+        <!-- Students will be loaded here -->
+    </div>
+
+    <script>
+        // Sample XML Data (Normally, you would load this from a file)
+        const studentsXML = `
+        <Students>
+            <Student>
+                <Name>John Doe</Name>
+                <RollNumber>12345</RollNumber>
+                <HallTicketNumber>101</HallTicketNumber>
+                <DateOfBirth>2000-05-15</DateOfBirth>
+                <Course>Computer Science</Course>
+            </Student>
+            
+            <Student>
+                <Name>Jane Smith</Name>
+                <RollNumber>12346</RollNumber>
+                <HallTicketNumber>102</HallTicketNumber>
+                <DateOfBirth>2001-08-20</DateOfBirth>
+                <Course>Electrical Engineering</Course>
+            </Student>
+            
+            <Student>
+                <Name>Sam Wilson</Name>
+                <RollNumber>12347</RollNumber>
+                <HallTicketNumber>H103</HallTicketNumber>
+                <DateOfBirth>2000-12-05</DateOfBirth>
+                <Course>Mechanical Engineering</Course>
+            </Student>
+        </Students>`;
+
+        // Function to parse XML and display students
+        function displayStudents(xmlString) {
+            const parser = new DOMParser();
+            const xmlDoc = parser.parseFromString(xmlString, "text/xml");
+            const students = xmlDoc.getElementsByTagName("Student");
+            const studentListDiv = document.getElementById("student-list");
+
+            // Hide all students initially
+            studentListDiv.innerHTML = ''; // Clear the existing list
+
+            for (let i = 0; i < students.length; i++) {
+                const student = students[i];
+                const name = student.getElementsByTagName("Name")[0].childNodes[0].nodeValue;
+                const rollNumber = student.getElementsByTagName("RollNumber")[0].childNodes[0].nodeValue;
+                const hallTicketNumber = student.getElementsByTagName("HallTicketNumber")[0].childNodes[0].nodeValue;
+                const course = student.getElementsByTagName("Course")[0].childNodes[0].nodeValue;
+
+                const studentDiv = document.createElement("div");
+                studentDiv.classList.add("student");
+                studentDiv.setAttribute("data-htn", hallTicketNumber); // Adding Hall Ticket Number for search
+
+                studentDiv.innerHTML = `
+                    <h3>${name}</h3>
+                    <p>Roll Number: ${rollNumber}</p>
+                    <p>Hall Ticket Number: ${hallTicketNumber}</p>
+                    <p>Course: ${course}</p>
+                `;
+
+                studentListDiv.appendChild(studentDiv);
+            }
+        }
+
+        // Function to search students by hall ticket number
+        function searchStudent() {
+            const query = document.getElementById("search").value.trim().toLowerCase();
+            const students = document.querySelectorAll(".student");
+            let found = false;
+
+            // Hide all students before showing the matching ones
+            students.forEach(student => {
+                student.style.display = "none"; // Initially hide all students
+            });
+
+            // Show students matching the search query
+            students.forEach(student => {
+                const hallTicketNumber = student.getAttribute("data-htn").toLowerCase();
+                if (hallTicketNumber.includes(query)) {
+                    student.style.display = "block"; // Show student
+                    found = true;
+                }
+            });
+
+            if (!found) {
+                alert("No student found with the given Hall Ticket Number.");
+            }
+        }
+
+        // Initially display all students (but hide them)
+        displayStudents(studentsXML);
+    </script>
+
+</body>
+</html>
