@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<students>
+    <student>
+        <name>John Doe</name>
+        <age>20</age>
+        <grade>A</grade>
+        <hall_ticket>
+            <ticket_number>12345</ticket_number>
+            <exam_name>Math Final Exam</exam_name>
+            <exam_date>2025-05-10</exam_date>
+            <exam_time>10:00 AM</exam_time>
+        </hall_ticket>
+    </student>
+    <student>
+        <name>Jane Smith</name>
+        <age>22</age>
+        <grade>B+</grade>
+        <hall_ticket>
+            <ticket_number>67890</ticket_number>
+            <exam_name>Science Final Exam</exam_name>
+            <exam_date>2025-05-12</exam_date>
+            <exam_time>2:00 PM</exam_time>
+        </hall_ticket>
+    </student>
+</students>
